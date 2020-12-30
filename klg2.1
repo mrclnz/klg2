@@ -1,0 +1,93 @@
+.Dd September 2017
+.Dt klg2 1
+.Os klg2 program
+.Sh NAME
+.Nm klg2
+.Nd Print a PBM file on a Casio KL-G2 label printer
+.Sh SYNOPSIS
+.Nm klg2
+.Op Fl FCHvh
+.Op Fl m Ar margin
+.Op Fl t Ar tapesize
+.Op Fl c Ar cutmode
+.Op Fl d Ar density
+.Sh DESCRIPTION
+The
+.Nm
+program reads a PBM file on the standard input and prints it on a Casio
+KL-G2 label printer connected to the USB port. Options are provided for
+manually feeding or cutting the tape (no image is read in that case).
+.Pp
+The options are as follows:
+.Bl -tag -width Ds
+.It Fl F
+Feed the tape and exits. Equivalent to the manual feed from keyboard.
+.It Fl C
+Cut the tape and exits. Tape is fed a little due to how the mechanism
+works. Equivalent to the manual cut from keyboard.
+.It Fl H
+Do an half-cut and exits. There is no equivalent from the keyboard, and,
+in fact, the operation itself is of dubious utility.
+.It Fl v
+Enables verbose logging on standard error of the communication with the
+printer. Only for debugging and troubleshooting.
+.It Fl m Ar margin
+Select the pre- and post- printing tape feed. Values from 1 to 3 are
+equivalent to the small, medium, large margin options in the printer
+FORM menu. Setting margin to 0 put the printer in no-feed mode and
+inhibits the cutter. The default is 1 (small margin).
+.It Fl t Ar tapesize
+Select the tape width in millimeters; accepted values are 6, 9, 12, 18
+and 24. This is only used for verifying the installed cartridge (the
+printer detects keying holes in the cartridge's body) and doesn't affect
+the actual print area (all the 128 printhead elements are available).
+The default is 12 millimeters.
+.It Fl c Ar cutmode
+Select the cutter operation mode. 0 disables the cutter. 1 operates an
+half cut at the beginning of the label and a full cut at the end. 2 does
+a full cut both at the beginning and at the end of the printed label.
+The default is half-cut mode.
+.It Fl d Ar density
+Sets the print density. 1 is lighter and 5 is darker. Default is 3.
+.El
+.Pp
+The image to be printed is read from the standard input and must be in
+raw PBM format. The maximum height is 128 pixels (the printhead size)
+while the length is substantially limited by the available tape and
+memory (the printer can spool in pages so printer memory is not an
+issue).
+.Pp
+Images shorter than 128 pixel are centered on the print area but the
+printhead is driven on the whole width independently on the tape width
+selected.
+.Pp
+The printer has a thermal 200dpi printhead (8 points per millimeter),
+with an active area of 16mm. The full resolution is only available with
+18mm and 24mm tapes. The nominal print area for 12mm tape is 80 points,
+but about 88 are usually accessible on the tape. For smaller tapes the
+active area is in proportion.
+.Pp
+It is not recommended to try printing outside the tape since the
+printhead could be damaged.
+.Sh EXIT STATUS
+.Ex -std
+.Sh HISTORY
+.Nm
+was developed by reverse engineering the USB protocol used by the
+proprietary Casio FA-3000 Label Printing Software. Some information were
+also obtained by cross-referencing the protocol with the Pegg EL
+software written by Daniel Amkreutz and Alex Perry for the EL label
+printers.
+.Pp
+Unfortunately the Casio documentation doesn't seem to be still available
+and many commands have no known meaning.
+.Sh BUGS
+.Nm
+was tested only on one printer and only with 12mm tape. Since at the
+time of writing the KL-G2 is the only USB connected label printer
+actively sold by Casio there shouldn't be compatibility issues.
+.Pp
+Anyway the protocol remained mostly the same from the EL series so it
+should be relatively easy to adapt the
+.Nm
+program for older or newer printers.

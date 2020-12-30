@@ -1,0 +1,14 @@
+This is a tool for printing and driving the Casio KL-G2 label printer.
+
+Installation requires libusb-1.0 and follows the usual
+
+configure;make;make install 
+
+More information can be found in the supplied manpage and in the source
+code, of course.
+
+No endorsement or support whatsoever is given by Casio Computer.
+
+--
+Lorenzo Marcantonio
+lomarcan@tin.it
